@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const bookModel = require("./models/bookModel");
+const bookModel = require("../models/bookModel");
 
 const authentication = async function (req, res, next) {
   try {
@@ -14,6 +14,7 @@ const authentication = async function (req, res, next) {
   }
 };
 
+//02__________________________________________________________________________________________________________
 const authorizationToCreateBook = async function (req, res, next) {
   try {
     const token = req.headers["x-api-key"];
@@ -25,6 +26,12 @@ const authorizationToCreateBook = async function (req, res, next) {
     const decodedToken = jwt.verify(token, "Project-Books");
     const userLoggedIn = decodedToken._id;
     const userIdFromBody = req.body.userId;
+
+    if (!userIdFromBody) {
+      return res
+        .status(400)
+        .send({ status: false, msg: "Please provide the User Id." }); //UserID is mandory
+    }
     if (userLoggedIn !== userIdFromBody)
       return res.status(403).send("You are not autherised to access.");
     next();
@@ -33,6 +40,9 @@ const authorizationToCreateBook = async function (req, res, next) {
     res.status(500).send({ msg: err.message });
   }
 };
+
+
+//03_________________________________________________________________________________________________________
 
 const authorization = async function (req, res, next) {
   try {

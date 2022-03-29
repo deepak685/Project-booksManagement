@@ -41,11 +41,7 @@ const createBook = async function (req, res) {
         .status(400)
         .send({ status: false, msg: "Please provide the excerpt." }); //Excerpt is mandory
     }
-    if (!isValidValue(userId)) {
-      return res
-        .status(400)
-        .send({ status: false, msg: "Please provide the User Id." }); //UserID is mandory
-    }
+    
     const isValidUserId = await userModel.findById(userId);
     if (!isValidUserId) {
       return res.status(404).send({ status: true, msg: "User not found." }); //find User
@@ -124,6 +120,8 @@ const getBooksByQuery = async function (req, res) {
   }
 };
 
+
+//02_____________________________________________________________________________________________
 const getBooksById = async function (req, res) {
   try {
     const bookId = req.params.bookId;
@@ -148,6 +146,7 @@ const getBooksById = async function (req, res) {
   }
 };
 
+//04___________________________________________________________________________________________________________
 const updateBooks = async function (req, res) {
   try {
     const bookId = req.params.bookId;
@@ -160,11 +159,7 @@ const updateBooks = async function (req, res) {
         .status(404)
         .send({ status: true, msg: "no book found to update." });
     }
-    // const userIdFromParam = req.params.userId
-    // const userIdFromBook = IsValidBookId.userId.toString()    //change the userId to string
-    // if (userIdFromParam !== userIdFromBook) {          // for similar userId from param & bookModel to update
-    //     return res.status(403).send({status : false, msg : "This is not your book, you can not update it."})
-    // }
+  
     const dataToUpdate = req.body;
     if (!isValidDetails(dataToUpdate)) {
       res
@@ -211,6 +206,7 @@ const updateBooks = async function (req, res) {
   }
 };
 
+//05_________________________________________________________________________________________________
 const deleteBooks = async function (req, res) {
   try {
     const bookId = req.params.bookId;
@@ -223,11 +219,7 @@ const deleteBooks = async function (req, res) {
         .status(404)
         .send({ status: true, msg: "no book found to delete." });
     }
-    // const userIdFromParam = req.params.userId
-    // const userIdFromBook = IsValidBookId.userId.toString()    //change the userId to string
-    // if (userIdFromParam !== userIdFromBook) {          // for similar userId from param & bookModel to update
-    //     return res.status(403).send({status : false, msg : "This is not your book, you can not delete it."})
-    // }
+  
     const deletedDetails = await bookModel.findOneAndUpdate(
       { _id: bookId },
       { isDeleted: true, deletedAt: new Date() },
