@@ -1,10 +1,26 @@
-const express = require("express")
+const express = require('express');
 
-const router = express.Router()
-const controller1 = require("../controller/userController")
+const router = express.Router();
 
+const userController = require("../controller/userController");
+const bookController = require("../controller/bookController");
+const reviewCrontroller = require("../controller/reviewController");
+const middleware = require("../middleware/auth");
 
-router.post("/createuser", controller1.createUser)
-router.post("/userLogin", controller1.login)
+//user API's
+router.post("/register", userController.createUser);   // CreateUser
+router.post("/login", userController.login);   // LoginUser
 
-module.exports = router
+//book API's
+router.post("/books", middleware.authorizationToCreateBook, bookController.createBook);   // CreateBook
+router.get("/books", middleware.authentication, bookController.getBooksByQuery);   //GetBooks
+router.get("/books/:bookId", middleware.authorization, bookController.getBooksById);   //GetBooksbyID
+router.put("/books/:bookId", middleware.authorization, bookController.updateBooks);   //UpdateBooks
+router.delete("/books/:bookId", middleware.authorization, bookController.deleteBooks);
+
+//Review API's
+router.post("/books/:bookId/review", reviewCrontroller.createReview);   //CreateReview
+router.put("/books/:bookId/review/:reviewId", reviewCrontroller.updateReview);   //UpdateReview
+router.delete("/books/:bookId/review/:reviewId", reviewCrontroller.deleteReview);   //DeleteReview
+
+module.exports = router;

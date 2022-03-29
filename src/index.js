@@ -1,18 +1,19 @@
-const express = require("express")
-const app = express()
-app.use(express.json())
+const express = require("express");;
+const bodyParser = require("body-parser");
+const route = require("./routes/route.js");
+const { default: mongoose } = require("mongoose");
+const app = express();
 
-const bodyParser = require("body-parser")
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json());
+app.use("/", route);  
+app.use(bodyParser.urlencoded({ extended: true }));
 
-const route = require("../src/routes/route")
-app.use("/", route)
+mongoose.connect("mongodb+srv://CCAnkit:CCAnkit09@clusternew.gds9x.mongodb.net/group24Database", {
+    useNewUrlParser: true})
+.then(() => console.log('MongoDb is connected'))
+.catch(err => console.log('Connection error'))
 
-const mongoose = require("mongoose")
-const url = "mongodb+srv://Deependra1999:Z1ZWVlMvcAFQsu2u@cluster0.4nkid.mongodb.net/book-project"
-mongoose.connect(url, { useNewUrlParser: true })
-    .then(() => console.log("database is successfully connect"))
-    .catch(err => console.log(err))
-
-app.listen(5000, () => console.log("app running on port 5000 successfully"))
+app.listen(process.env.PORT || 3000, function() {
+    console.log('Express app running on port ' + 
+    (process.env.PORT || 3000));
+});
