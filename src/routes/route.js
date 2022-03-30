@@ -12,11 +12,11 @@ router.post("/register", userController.createUser);   // CreateUser
 router.post("/login", userController.login);   // LoginUser
 
 //book API's
-router.post("/books", middleware.authorizationToCreateBook, bookController.createBook);   // CreateBook
-router.get("/books", middleware.authentication, bookController.getBooksByQuery);   //GetBooks
-router.get("/books/:bookId", middleware.authorization, bookController.getBooksById);   //GetBooksbyID
-router.put("/books/:bookId", middleware.authorization, bookController.updateBooks);   //UpdateBooks
-router.delete("/books/:bookId", middleware.authorization, bookController.deleteBooks);
+router.post("/books", middleware.userAuth, bookController.createBook);   // CreateBook
+router.get("/books", middleware.userAuth, bookController.getBooksbyquery);   //GetBooks
+router.get("/books/:bookId", middleware.userAuth, bookController.getBooksById);   //GetBooksbyID
+router.put("/books/:bookId", middleware.userAuth, bookController.updateBooks);   //UpdateBooks
+router.delete("/books/:bookId", middleware.userAuth, bookController.deleteBooks);
 
 //Review API's
 router.post("/books/:bookId/review", reviewCrontroller.createReview);   //CreateReview
