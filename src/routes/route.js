@@ -7,20 +7,44 @@ const bookController = require("../controller/bookController");
 const reviewCrontroller = require("../controller/reviewController");
 const middleware = require("../middleware/auth");
 
-//user API's
-router.post("/register", userController.createUser);   // CreateUser
-router.post("/login", userController.login);   // LoginUser
+//*******************************************user API's***********************************************************
+// CreateUser
+router.post("/register", userController.createUser);
 
-//book API's
-router.post("/books", middleware.userAuth, bookController.createBook);   // CreateBook
-router.get("/books", middleware.userAuth, bookController.getBooksbyquery);   //GetBooks
-router.get("/books/:bookId", middleware.userAuth, bookController.getBooksById);   //GetBooksbyID
-router.put("/books/:bookId", middleware.userAuth, bookController.updateBooks);   //UpdateBooks
-router.delete("/books/:bookId", middleware.userAuth, bookController.deleteBooks);
+// LoginUser
+router.post("/login", userController.login);
 
-//Review API's
-router.post("/books/:bookId/review", reviewCrontroller.createReview);   //CreateReview
-router.put("/books/:bookId/review/:reviewId", reviewCrontroller.updateReview);   //UpdateReview
-router.delete("/books/:bookId/review/:reviewId", reviewCrontroller.deleteReview);   //DeleteReview
+//*******************************************book API's*********************************************************
+// CreateBook
+router.post("/books", middleware.userAuth, bookController.createBook);
+
+//GetBooks
+router.get("/books", middleware.userAuth, bookController.getBooksbyquery);
+
+//GetBooksbyID
+router.get("/books/:bookId", middleware.userAuth, bookController.getBooksById);
+
+//UpdateBooks
+router.put("/books/:bookId", middleware.userAuth, bookController.updateBooks);
+
+//deleteBooks
+router.delete(
+  "/books/:bookId",
+  middleware.userAuth,
+  bookController.deleteBooks
+);
+
+//************************************************Review API's***************************************************
+//CreateReview
+router.post("/books/:bookId/review", reviewCrontroller.createReview);
+
+//UpdateReview
+router.put("/books/:bookId/review/:reviewId", reviewCrontroller.updateReview);
+
+//DeleteReview
+router.delete(
+  "/books/:bookId/review/:reviewId",
+  reviewCrontroller.deleteReview
+);
 
 module.exports = router;
