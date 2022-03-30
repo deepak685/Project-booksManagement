@@ -1,18 +1,9 @@
 const bookModel = require("../models/bookModel");
 const moment = require("moment");
 const reviewModel = require("../models/reviewModel");
+const valid=require("../validators/validate")
 
-// validation
-const isValidValue = function (value) {
-  //it should not be like undefined or null.
-  if (typeof value === "undefined" || value === null) return false; //if the value is undefined or null it will return false.
-  if (typeof value === "string" && value.trim().length === 0) return false;
-  return true;
-};
 
-const isValidDetails = function (details) {
-  return Object.keys(details).length > 0;
-};
 
 const createReview = async function (req, res) {
   try {
@@ -26,19 +17,19 @@ const createReview = async function (req, res) {
     if (!isValidBookId) {
       return res.status(404).send({ status: true, msg: "no book found." });
     }
-    if (!isValidDetails(review)) {
+    if (!valid.isValidDetails(review)) {
       return res
         .status(400)
         .send({ status: false, msg: "please provide review of the book" });
     }
 
-    if (!isValidValue(reviewedBy)) {
+    if (!valid.isValidValue(reviewedBy)) {
       return res
         .status(400)
         .send({ status: false, msg: "please provide who reviewed the book" });
     }
 
-    if (!isValidValue(rating)) {
+    if (!valid.isValidValue(rating)) {
       return res
         .status(400)
         .send({ status: false, msg: "please provide the rating" });
@@ -116,7 +107,7 @@ const updateReview = async function (req, res) {
         });
     }
     const dataToUpdate = req.body;
-    if (!isValidDetails(dataToUpdate)) {
+    if (!valid.isValidDetails(dataToUpdate)) {
       res
         .status(400)
         .send({

@@ -1,41 +1,27 @@
 const userModel = require("../models/userModel");
 const jwt = require("jsonwebtoken");
+const valid=require("../validators/validate")
 
-//***************************************validation for req.body**********************************************
-const isValidValue = function (value) {
-  //it should not be like undefined or null.
-  if (typeof value === "undefined" || value === null) return false; //if the value is undefined or null it will return false.
-  if (typeof value === "string" && value.trim().length === 0) return false; //if the value is string & length is 0 it will return false.
-  return true;
-};
-
-const isValidDetails = function (details) {
-  return Object.keys(details).length > 0;
-};
-//***************************************validation for title******************************************
-let isValidTitle = (title) => {
-  return ["Mr", "Mrs", "Miss"].indexOf(title) !== -1;
-};
 
 //**********************************01***CREATE USER****************************************************
 
 const createUser = async function(req, res) {
   try{
       const user = req.body
-      if(!isValidDetails(user)){
+      if(!valid.isValidDetails(user)){
           res.status(400).send({status:false, msg:"Please provide the User details"})  //Validate the value that is provided by the Client.
       }
       const {title, name, phone, email, password} = user   
-      if (!isValidValue(title)){
+      if (!valid.isValidValue(title)){
           return res.status(400).send({status:false, msg:"Please provide the Title"})   //title is mandory 
       }
-      if (!isValidTitle(title)){
+      if (!valid.isValidTitle(title)){
           return res.status(400).send({status:false, msg:"Please should be Mr || Mrs || Miss"})   //Enum is mandory 
       }
-      if (!isValidValue(name)){
+      if (!valid.isValidValue(name)){
           return res.status(400).send({status:false, msg:"Please provide the Name"})   //name is mandory 
       }
-      if (!isValidValue(phone)){
+      if (!valid.isValidValue(phone)){
           return res.status(400).send({status:false, msg:"Please provide phone number"})    //phone is mandory
       }
       if(!/^(?:(?:\+|0{0,2})91(\s*[\ -]\s*)?|[0]?)?[789]\d{9}|(\d[ -]?){10}\d$/.test(phone)){
@@ -45,7 +31,7 @@ const createUser = async function(req, res) {
       if(phoneUsed){
           return res.status(400).send({status:false, msg:`${phone} is already exists`})   //checking the phone number is already exist or not.
       }    
-      if (!isValidValue(email)){
+      if (!valid.isValidValue(email)){
           return res.status(400).send({status:false, msg:"Please provide Email Address"})   //email is mandory
       }
       if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)){
@@ -55,7 +41,7 @@ const createUser = async function(req, res) {
       if(emailUsed){
           return res.status(400).send({status:false, msg:`${email} is already exists`})   //checking the email address is already exist or not.
       }
-      if (!isValidValue(password)){
+      if (!valid.isValidValue(password)){
           return res.status(400).send({status:false, msg:"Please provide the Password"})   //password is mandory 
       }
       if(!(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$/.test(password))){
@@ -75,14 +61,14 @@ const createUser = async function(req, res) {
 const login = async function(req, res) {
   try{
       const login = req.body
-      if (!isValidDetails(login)){
+      if (!valid.isValidDetails(login)){
           return res.status(400).send({ status: false, msg: "Please provide the login Details" })   //validating the parameters of body
       }
       const {email, password} = login
-      if (!isValidValue(email)){
+      if (!valid.isValidValue(email)){
           return res.status(400).send({status:false, msg:"Please provide the Email Address"})   //email is mandatory
       }
-      if (!isValidValue(password)){
+      if (!valid.isValidValue(password)){
           return res.status(400).send({status:false, msg:"Please provide the password"})  //password is mandatory
       }
       const User = await userModel.findOne({email, password});   //validating the email/password in the userModel.
