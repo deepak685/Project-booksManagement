@@ -163,7 +163,7 @@ const updateBooks = async function(req, res) {
           res.status(400).send({status:false, msg:"Please provide the Book details to update"})  //Validate the value that is provided by the Client.
       }
 
-      const {title, ISBN} = dataToUpdate
+      const {title, ISBN,releasedAt} = dataToUpdate
 
       const isDuplicateTitle = await bookModel.findOne({title : title})     //Title is unique
 
@@ -176,10 +176,16 @@ const updateBooks = async function(req, res) {
       if (isDuplicateISBN){
           return res.status(400).send({staus:false, msg:"Book with provided ISBN no. is already present."})
       }
+      
+      const isDuplicateRealesedAt = await bookModel.findOne({releasedAt:releasedAt})        //realeased at is unique
+
+      if (isDuplicateRealesedAt){
+          return res.status(400).send({staus:false, msg:"Book with provided releasedAt  is already present."})
+      }
 
       const updatedDetails = await bookModel.findOneAndUpdate(
           {_id : bookId},    //Find the bookId and update these title, excerpt & ISBN.
-          {title : dataToUpdate.title, excerpt : dataToUpdate.excerpt, ISBN : dataToUpdate.ISBN},
+          {title : dataToUpdate.title, excerpt : dataToUpdate.excerpt, ISBN : dataToUpdate.ISBN,releasedAt:dataToUpdate.releasedAt},
           {new : true, upsert : true})    //ispublished will be true and update the date at publishAt.
 
       res.status(201).send({status:true, msg: "book details updated successfully", data:updatedDetails})
