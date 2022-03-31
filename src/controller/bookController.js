@@ -36,7 +36,7 @@ const createBook = async function(req, res) {
       const isValidUserId = await userModel.findById(userId)
 
       if (!isValidUserId){
-          return res.status(404).send({status:true, msg:"User not found."})   //find User in userModel
+          return res.status(400).send({status:true, msg:"User not found."})   //find User in userModel
       }
 
       if (!valid.isValidValue(ISBN)){
