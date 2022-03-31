@@ -127,6 +127,7 @@
 - Delete the related reivew.
 - Update the books document - decrease review count by one
 
+
 ### Authentication
 - Make sure all the book routes are protected.
 
@@ -142,6 +143,8 @@
 
 Refer below sample
  ![A Postman collection and request sample](assets/Postman-collection-sample.png)
+
+
 
 ## Response
 

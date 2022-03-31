@@ -19,7 +19,7 @@ const createReview = async function (req, res) {
     if (!valid.isValidDetails(review)) {
       return res
         .status(400)
-        .send({ status: false, msg: "please provide review of the book" });
+        .send({ status: false, msg: "please provide review details of the book" });
     }
 
     if (!valid.isValidValue(reviewedBy)) {
@@ -36,7 +36,7 @@ const createReview = async function (req, res) {
     if (rating < 1 || rating > 5) {
       return res.status(400).send({
         status: false,
-        msg: "rating should be greater than 1 and less than 5",
+        msg: "rating should be greater between 1 and 5",
       });
     }
 
